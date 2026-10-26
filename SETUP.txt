@@ -1,0 +1,62 @@
+LLMSimulator 本地安装与使用
+安装日期：2026-10-15
+
+目录与版本
+  工作目录：/home/xiangyur/projects/projects/DSE/LLM_Sim
+  源码：LLMSimulator/
+  上游：https://github.com/scale-snu/LLMSimulator
+  主仓库提交：419252761fbdb95b789778a02256d458a5537ec7
+  Ramulator 提交：b5262869b24790e5ec62d9d9974fca9bbb4f54e0
+  编译器：系统 GCC/G++ 13.3.0，C++20
+  构建工具：.venv 内的 CMake 3.31.10、Ninja 1.13.0
+  构建类型：Release；默认最多 8 个并行编译任务
+  C++ 依赖：yaml-cpp 0.7.0、spdlog 1.11.0、argparse 2.9
+
+直接运行（不需要激活 Python 环境）
+  cd /home/xiangyur/projects/projects/DSE/LLM_Sim
+  ./run.sh > LLMSimulator/logs/run.log 2>&1
+
+修改配置
+  编辑 LLMSimulator/config.yaml，然后重新运行 ./run.sh。
+  也可指定其他配置：./run.sh /absolute/path/to/custom.yaml
+  自定义配置的相对路径按调用时的目录解析；配置内的相对输出路径则按
+  LLMSimulator/build/ 解析。自定义输出目录请提前创建。
+  启动脚本默认直接读取源码目录的配置，不使用 build/config.yaml 副本。
+
+当前默认配置
+  deepseekV3；模拟 1 个节点、8 个 B100；GPU 模式；decode 模式。
+  batch=32，input_len=1024，output_len=10，iter=5，precision_byte=1。
+  synthesis 合成请求；use_ramulator=off。
+  本机运行的是 CPU 上的性能/能耗仿真，不需要 CUDA、真实 B100 或模型权重。
+
+输出与验证
+  LLMSimulator/data/*.csv：仿真统计结果。
+  LLMSimulator/logs/run-default.log：安装时默认示例的完整运行日志。
+  LLMSimulator/logs/build.log：首次编译错误及修复后的成功编译日志。
+  LLMSimulator/logs/rebuild.log：重新配置与增量编译验证日志。
+  默认示例运行退出码 0；CSV 的时间、延迟和总能耗为有限正数，OOM=0。
+  已验证默认 GPU 仿真路径；未验证 use_ramulator=on 或 PIM 模式。
+
+已知上游行为
+  runIterationMixed 在每轮开始时导出上一轮统计，结束后未写最后一轮。
+  所以 iter=5 的默认示例完成 5 轮计算，但 CSV 只有 4 行数据。
+  日志 Total 包含全部 5 轮。本次安装没有修改这段仿真/导出逻辑。
+  项目有非 void 函数缺少返回值的编译警告，默认示例仍正常运行。
+
+重新编译
+  ./build.sh
+  BUILD_JOBS=4 ./build.sh
+
+已应用的源码兼容处理
+  已按上游 README 对 Ramulator 应用 patch/ramulator2_pim.patch。
+  该补丁移除了 src/base/utils.h 中的 #include <cstdint>，导致 GCC 13
+  编译 uint64_t 失败；已在该头文件中恢复这一 include。
+  因此 Ramulator 子模块显示修改状态是正常的，不要直接重置子模块。
+  没有更改上游默认 config.yaml。
+
+构建工具环境重建（仅在 .venv 丢失时需要）
+  python3 -m venv .venv
+  .venv/bin/python -m pip install -r requirements-tools.txt
+  ./build.sh
+  从全新源码重建还需要初始化子模块、应用上游补丁并恢复上述 include；
+  第一次 CMake 配置会联网下载 C++ 依赖。
