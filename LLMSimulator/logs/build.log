@@ -1,0 +1,154 @@
+[0/2] Re-checking globbed directories...
+[1/127] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/directives.cpp.o
+[2/127] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/binary.cpp.o
+[3/127] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/depthguard.cpp.o
+[4/127] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/exceptions.cpp.o
+[5/127] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/emit.cpp.o
+[6/127] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/emitfromevents.cpp.o
+[7/127] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/emitterstate.cpp.o
+[8/127] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/convert.cpp.o
+[9/127] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/emitter.cpp.o
+[10/127] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/exp.cpp.o
+[11/127] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/null.cpp.o
+[12/127] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/node.cpp.o
+[13/127] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/memory.cpp.o
+[14/127] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/ostream_wrapper.cpp.o
+[15/127] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/nodebuilder.cpp.o
+[16/127] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/nodeevents.cpp.o
+[17/127] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/node_data.cpp.o
+[18/127] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/regex_yaml.cpp.o
+[19/127] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/parse.cpp.o
+[20/127] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/parser.cpp.o
+[21/127] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/simplekey.cpp.o
+[22/127] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/scanscalar.cpp.o
+[23/127] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/stream.cpp.o
+[24/127] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/emitterutils.cpp.o
+[25/127] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/tag.cpp.o
+[26/127] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/scantag.cpp.o
+[27/127] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/singledocparser.cpp.o
+[28/127] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/scanner.cpp.o
+[29/127] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/scantoken.cpp.o
+[30/127] Building CXX object _deps/spdlog-build/CMakeFiles/spdlog.dir/src/cfg.cpp.o
+[31/127] Building CXX object _deps/spdlog-build/CMakeFiles/spdlog.dir/src/async.cpp.o
+[32/127] Building CXX object _deps/spdlog-build/CMakeFiles/spdlog.dir/src/file_sinks.cpp.o
+[33/127] Building CXX object _deps/spdlog-build/CMakeFiles/spdlog.dir/src/stdout_sinks.cpp.o
+[34/127] Building CXX object _deps/spdlog-build/CMakeFiles/spdlog.dir/src/color_sinks.cpp.o
+[35/127] Building CXX object src/dram/CMakeFiles/dram.dir/pimkernel/pim_kernel.cpp.o
+[36/127] Building CXX object src/dram/CMakeFiles/dram.dir/pim_request.cpp.o
+[37/127] Building CXX object src/dram/CMakeFiles/dram.dir/dram_request.cpp.o
+[38/127] Building CXX object _deps/spdlog-build/CMakeFiles/spdlog.dir/src/bundled_fmtlib_format.cpp.o
+[39/127] Linking CXX static library _deps/yaml-cpp-build/libyaml-cpp.a
+[40/127] Building CXX object src/dram/CMakeFiles/dram.dir/pimkernel/Read.cpp.o
+[41/127] Building CXX object src/dram/CMakeFiles/dram.dir/pimkernel/Write.cpp.o
+[42/127] Building CXX object src/dram/CMakeFiles/dram.dir/pimkernel/GEMV.cpp.o
+[43/127] Building CXX object src/dram/ramulator2/src/base/CMakeFiles/ramulator-base.dir/utils.cpp.o
+FAILED: [code=1] src/dram/ramulator2/src/base/CMakeFiles/ramulator-base.dir/utils.cpp.o 
+/usr/bin/c++  -I/home/xiangyur/projects/projects/DSE/LLM_Sim/LLMSimulator/src -I/home/xiangyur/projects/projects/DSE/LLM_Sim/LLMSimulator/src/dram/ramulator2/src -I/home/xiangyur/projects/projects/DSE/LLM_Sim/LLMSimulator/src/dram/ramulator2/ext/yaml-cpp/include -I/home/xiangyur/projects/projects/DSE/LLM_Sim/LLMSimulator/src/dram/ramulator2/ext/spdlog/include -I/home/xiangyur/projects/projects/DSE/LLM_Sim/LLMSimulator/src/dram/ramulator2/ext/argparse/include -O3 -DNDEBUG -std=c++20 -fPIC -fPIC -MD -MT src/dram/ramulator2/src/base/CMakeFiles/ramulator-base.dir/utils.cpp.o -MF src/dram/ramulator2/src/base/CMakeFiles/ramulator-base.dir/utils.cpp.o.d -o src/dram/ramulator2/src/base/CMakeFiles/ramulator-base.dir/utils.cpp.o -c /home/xiangyur/projects/projects/DSE/LLM_Sim/LLMSimulator/src/dram/ramulator2/src/base/utils.cpp
+In file included from /home/xiangyur/projects/projects/DSE/LLM_Sim/LLMSimulator/src/dram/ramulator2/src/base/utils.cpp:1:
+/home/xiangyur/projects/projects/DSE/LLM_Sim/LLMSimulator/src/dram/ramulator2/src/base/utils.h:36:1: error: ‘uint64_t’ does not name a type
+   36 | uint64_t JEDEC_rounding(float t_ns, int tCK_ps);
+      | ^~~~~~~~
+/home/xiangyur/projects/projects/DSE/LLM_Sim/LLMSimulator/src/dram/ramulator2/src/base/utils.h:6:1: note: ‘uint64_t’ is defined in header ‘<cstdint>’; did you forget to ‘#include <cstdint>’?
+    5 | #include <vector>
+  +++ |+#include <cstdint>
+    6 | 
+/home/xiangyur/projects/projects/DSE/LLM_Sim/LLMSimulator/src/dram/ramulator2/src/base/utils.h:46:1: error: ‘uint64_t’ does not name a type
+   46 | uint64_t JEDEC_rounding_DDR5(float t_ns, int tCK_ps);
+      | ^~~~~~~~
+/home/xiangyur/projects/projects/DSE/LLM_Sim/LLMSimulator/src/dram/ramulator2/src/base/utils.h:46:1: note: ‘uint64_t’ is defined in header ‘<cstdint>’; did you forget to ‘#include <cstdint>’?
+[44/127] Building CXX object src/dram/CMakeFiles/dram.dir/memory_object.cpp.o
+[45/127] Building CXX object src/dram/CMakeFiles/dram.dir/mmap_controller.cpp.o
+[46/127] Building CXX object src/dram/CMakeFiles/dram.dir/dram_interface.cpp.o
+[47/127] Building CXX object _deps/spdlog-build/CMakeFiles/spdlog.dir/src/spdlog.cpp.o
+[48/127] Building CXX object src/dram/ramulator2/src/base/CMakeFiles/ramulator-base.dir/logging.cpp.o
+[49/127] Building CXX object src/dram/ramulator2/src/base/CMakeFiles/ramulator-base.dir/factory.cpp.o
+[50/127] Building CXX object src/dram/ramulator2/src/base/CMakeFiles/ramulator-base.dir/config.cpp.o
+ninja: build stopped: subcommand failed.
+[0/2] Re-checking globbed directories...
+[1/84] Linking CXX static library _deps/spdlog-build/libspdlog.a
+[2/84] Building CXX object src/dram/ramulator2/src/base/CMakeFiles/ramulator-base.dir/utils.cpp.o
+[3/84] Building CXX object src/dram/CMakeFiles/dram.dir/pimkernel/Write.cpp.o
+[4/84] Building CXX object src/dram/CMakeFiles/dram.dir/pimkernel/Read.cpp.o
+[5/84] Building CXX object src/dram/CMakeFiles/dram.dir/pimkernel/GEMV.cpp.o
+[6/84] Building CXX object src/dram/CMakeFiles/dram.dir/dram_interface.cpp.o
+[7/84] Building CXX object src/dram/ramulator2/src/base/CMakeFiles/ramulator-base.dir/stats.cpp.o
+[8/84] Building CXX object src/dram/ramulator2/src/base/CMakeFiles/ramulator-base.dir/request.cpp.o
+[9/84] Building CXX object src/dram/ramulator2/src/base/CMakeFiles/ramulator-base.dir/factory.cpp.o
+[10/84] Building CXX object src/dram/ramulator2/src/frontend/CMakeFiles/ramulator-frontend.dir/impl/memory_trace/loadstore_trace.cpp.o
+[11/84] Building CXX object src/dram/ramulator2/src/frontend/CMakeFiles/ramulator-frontend.dir/impl/processor/simpleO3/core.cpp.o
+[12/84] Building CXX object src/dram/ramulator2/src/frontend/CMakeFiles/ramulator-frontend.dir/impl/memory_trace/readwrite_trace.cpp.o
+[13/84] Building CXX object src/dram/ramulator2/src/frontend/CMakeFiles/ramulator-frontend.dir/impl/processor/simpleO3/simpleO3.cpp.o
+[14/84] Building CXX object src/dram/ramulator2/src/base/CMakeFiles/ramulator-base.dir/config.cpp.o
+[15/84] Building CXX object src/dram/ramulator2/src/frontend/CMakeFiles/ramulator-frontend.dir/impl/processor/simpleO3/trace.cpp.o
+[16/84] Building CXX object src/dram/ramulator2/src/frontend/CMakeFiles/ramulator-frontend.dir/impl/processor/simpleO3/llc.cpp.o
+[17/84] Building CXX object src/dram/ramulator2/src/frontend/CMakeFiles/ramulator-frontend.dir/impl/PIM_controller.cpp.o
+/home/xiangyur/projects/projects/DSE/LLM_Sim/LLMSimulator/src/dram/ramulator2/src/frontend/impl/PIM_controller.cpp: In member function ‘int Ramulator::PIMController::get_type(llm_system::PIMCommandType)’:
+/home/xiangyur/projects/projects/DSE/LLM_Sim/LLMSimulator/src/dram/ramulator2/src/frontend/impl/PIM_controller.cpp:53:7: warning: control reaches end of non-void function [-Wreturn-type]
+   53 |       default:
+      |       ^~~~~~~
+[18/84] Building CXX object src/dram/ramulator2/src/frontend/CMakeFiles/ramulator-frontend.dir/impl/external_wrapper/gem5_frontend.cpp.o
+[19/84] Building CXX object src/dram/ramulator2/src/translation/CMakeFiles/ramulator-translation.dir/impl/no_translation.cpp.o
+[20/84] Building CXX object src/dram/ramulator2/src/translation/CMakeFiles/ramulator-translation.dir/impl/random_translation.cpp.o
+[21/84] Building CXX object src/dram/ramulator2/src/memory_system/CMakeFiles/ramulator-memorysystem.dir/impl/dummy_memory_system.cpp.o
+[22/84] Building CXX object src/dram/ramulator2/src/memory_system/CMakeFiles/ramulator-memorysystem.dir/impl/generic_DRAM_system.cpp.o
+[23/84] Building CXX object src/dram/ramulator2/src/addr_mapper/CMakeFiles/ramulator-addrmapper.dir/impl/linear_mappers.cpp.o
+[24/84] Building CXX object src/dram/ramulator2/src/memory_system/CMakeFiles/ramulator-memorysystem.dir/impl/PIM_DRAM_system.cpp.o
+[25/84] Building CXX object src/dram/ramulator2/src/addr_mapper/CMakeFiles/ramulator-addrmapper.dir/impl/rit.cpp.o
+[26/84] Building CXX object src/dram/ramulator2/src/dram/CMakeFiles/ramulator-dram.dir/impl/DDR3.cpp.o
+[27/84] Building CXX object src/dram/ramulator2/src/dram/CMakeFiles/ramulator-dram.dir/impl/DDR4.cpp.o
+[28/84] Building CXX object src/dram/ramulator2/src/dram/CMakeFiles/ramulator-dram.dir/impl/DDR4-VRR.cpp.o
+[29/84] Building CXX object src/dram/ramulator2/src/dram/CMakeFiles/ramulator-dram.dir/impl/DDR5.cpp.o
+[30/84] Building CXX object src/dram/ramulator2/src/dram/CMakeFiles/ramulator-dram.dir/impl/LPDDR5.cpp.o
+[31/84] Building CXX object src/dram/ramulator2/src/dram/CMakeFiles/ramulator-dram.dir/impl/HBM2.cpp.o
+[32/84] Building CXX object src/dram/ramulator2/src/dram/CMakeFiles/ramulator-dram.dir/impl/HBM.cpp.o
+[33/84] Building CXX object src/dram/ramulator2/src/dram/CMakeFiles/ramulator-dram.dir/impl/HBM3.cpp.o
+[34/84] Building CXX object src/dram/ramulator2/src/dram_controller/CMakeFiles/ramulator-controller.dir/impl/dummy_controller.cpp.o
+[35/84] Building CXX object src/dram/ramulator2/src/dram_controller/CMakeFiles/ramulator-controller.dir/impl/scheduler/generic_scheduler.cpp.o
+[36/84] Building CXX object src/dram/ramulator2/src/dram_controller/CMakeFiles/ramulator-controller.dir/impl/generic_dram_controller.cpp.o
+[37/84] Building CXX object src/dram/ramulator2/src/dram_controller/CMakeFiles/ramulator-controller.dir/impl/scheduler/PIM_scheduler.cpp.o
+[38/84] Building CXX object src/dram/ramulator2/src/dram_controller/CMakeFiles/ramulator-controller.dir/impl/PIM_dram_controller.cpp.o
+[39/84] Building CXX object src/dram/ramulator2/src/dram_controller/CMakeFiles/ramulator-controller.dir/impl/refresh/all_bank_refresh.cpp.o
+[40/84] Building CXX object src/dram/ramulator2/src/dram_controller/CMakeFiles/ramulator-controller.dir/impl/plugin/trace_recorder.cpp.o
+[41/84] Building CXX object src/dram/ramulator2/src/dram_controller/CMakeFiles/ramulator-controller.dir/impl/plugin/cmd_counter.cpp.o
+[42/84] Building CXX object src/dram/ramulator2/src/dram_controller/CMakeFiles/ramulator-controller.dir/impl/plugin/para.cpp.o
+[43/84] Building CXX object src/hardware/CMakeFiles/hardware.dir/node.cpp.o
+[44/84] Building CXX object src/hardware/CMakeFiles/hardware.dir/cluster.cpp.o
+[45/84] Building CXX object src/dram/ramulator2/src/dram_controller/CMakeFiles/ramulator-controller.dir/impl/plugin/graphene.cpp.o
+[46/84] Building CXX object src/dram/ramulator2/src/dram_controller/CMakeFiles/ramulator-controller.dir/impl/plugin/oracle_rh.cpp.o
+[47/84] Building CXX object src/dram/ramulator2/src/dram_controller/CMakeFiles/ramulator-controller.dir/impl/plugin/twice.cpp.o
+[48/84] Building CXX object src/dram/ramulator2/src/dram_controller/CMakeFiles/ramulator-controller.dir/impl/plugin/hydra.cpp.o
+[49/84] Building CXX object src/dram/ramulator2/src/dram_controller/CMakeFiles/ramulator-controller.dir/impl/plugin/rrs.cpp.o
+[50/84] Building CXX object src/hardware/CMakeFiles/hardware.dir/device.cpp.o
+[51/84] Building CXX object src/hardware/CMakeFiles/hardware.dir/layer_impl.cpp.o
+[52/84] Building CXX object src/hardware/CMakeFiles/hardware.dir/executor.cpp.o
+[53/84] Building CXX object src/hardware/CMakeFiles/hardware.dir/activation_impl.cpp.o
+[54/84] Building CXX object src/hardware/CMakeFiles/hardware.dir/linear_impl.cpp.o
+[55/84] Building CXX object src/module/CMakeFiles/module.dir/tensor.cpp.o
+[56/84] Building CXX object src/module/CMakeFiles/module.dir/module.cpp.o
+[57/84] Building CXX object src/module/CMakeFiles/module.dir/module_graph.cpp.o
+[58/84] Building CXX object src/module/CMakeFiles/module.dir/timeboard.cpp.o
+[59/84] Building CXX object src/module/CMakeFiles/module.dir/activation.cpp.o
+[60/84] Building CXX object src/module/CMakeFiles/module.dir/layernorm.cpp.o
+[61/84] Building CXX object src/hardware/CMakeFiles/hardware.dir/attention_sum_impl.cpp.o
+[62/84] Building CXX object src/module/CMakeFiles/module.dir/layer.cpp.o
+[63/84] Building CXX object src/module/CMakeFiles/module.dir/parallel.cpp.o
+[64/84] Building CXX object src/hardware/CMakeFiles/hardware.dir/attention_gen_impl.cpp.o
+[65/84] Building CXX object src/module/CMakeFiles/module.dir/linear.cpp.o
+[66/84] Building CXX object src/hardware/CMakeFiles/hardware.dir/attention_mixed_impl.cpp.o
+[67/84] Building CXX object src/module/CMakeFiles/module.dir/attention.cpp.o
+[68/84] Building CXX object src/module/CMakeFiles/module.dir/compressed_kv_restore.cpp.o
+[69/84] Building CXX object src/module/CMakeFiles/module.dir/embedding.cpp.o
+[70/84] Building CXX object src/module/CMakeFiles/module.dir/decoder.cpp.o
+[71/84] Building CXX object src/module/CMakeFiles/module.dir/residual.cpp.o
+[72/84] Building CXX object src/module/CMakeFiles/module.dir/communication.cpp.o
+[73/84] Building CXX object src/module/CMakeFiles/module.dir/rope.cpp.o
+[74/84] Linking CXX static library src/dram/libdram.a
+[75/84] Building CXX object src/module/CMakeFiles/module.dir/lm_head.cpp.o
+[76/84] Building CXX object src/module/CMakeFiles/module.dir/route.cpp.o
+[77/84] Building CXX object src/module/CMakeFiles/module.dir/expert.cpp.o
+[78/84] Building CXX object src/scheduler/CMakeFiles/scheduler.dir/sequence.cpp.o
+[79/84] Building CXX object src/model/CMakeFiles/model.dir/llm.cpp.o
+[80/84] Building CXX object src/scheduler/CMakeFiles/scheduler.dir/scheduler.cpp.o
+[81/84] Linking CXX shared library libllm_system.so
+[82/84] Building CXX object eval/CMakeFiles/run.dir/test.cpp.o
+[83/84] Linking CXX executable run

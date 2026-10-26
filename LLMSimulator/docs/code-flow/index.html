@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LLMSimulator · 代码阅读地图</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="flow-data.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="#" id="home"><span class="brand-icon">↳</span><span>LLMSimulator<small>代码阅读地图</small></span></a>
+    <div class="side-label">从入口，逐层读下去</div>
+    <div class="search-wrap"><label class="sr-only" for="search">搜索函数或文件</label><input id="search" placeholder="搜索函数或文件…" autocomplete="off"><kbd>/</kbd></div>
+    <div id="search-results" aria-live="polite"></div>
+    <nav id="landmarks" aria-label="阅读入口"></nav>
+    <div class="side-label section-space">阅读进度</div>
+    <div class="progress-card"><span id="read-count">0 个调用点已读</span><button id="resume" class="primary" disabled>回到「读到这里」</button><p id="bookmark-label">在节点上点书签，保存当前位置。</p></div>
+    <div class="progress-tools"><button id="export-progress">导出进度</button><button id="import-progress">导入进度</button><input id="progress-file" type="file" accept="application/json" hidden></div>
+    <div class="side-label section-space">当前配置</div>
+    <div class="config-card" id="config-summary"></div>
+    <div class="side-footer"><a href="architecture.html">◇ 查看对象架构图 ↗</a><br><span class="status-dot"></span>离线可用 · 进度保存在本浏览器<button id="help-open">使用说明与范围 ↗</button></div>
+  </aside>
+  <main>
+    <header class="topbar"><div><span class="eyebrow">SOURCE READING / 调用与返回</span><h1>顺着执行顺序，找到每一次跳转。</h1></div><button id="help-top" class="help-icon" aria-label="使用说明">?</button></header>
+    <div class="toolbar"><div class="navigation"><button id="back" disabled>← 返回调用点</button><nav id="breadcrumbs" aria-label="当前调用路径"></nav></div><div class="zoom-tools"><button id="zoom-out" aria-label="缩小">−</button><button id="zoom-reset">100%</button><button id="zoom-in" aria-label="放大">＋</button></div></div>
+    <div class="legend"><span><i class="dot call-dot"></i>项目内部调用</span><span><i class="dot condition-dot"></i>条件分支</span><span><i class="dot loop-dot"></i>循环体展示一次</span><span class="legend-tip">展开子流程 → 右侧下一层　·　点文件位置查看源码　·　拖动空白处平移</span></div>
+    <div id="workspace" tabindex="0" aria-label="可拖动、可缩放的调用流程图"><div id="canvas"><svg id="connectors" aria-hidden="true"></svg><div id="columns"></div></div></div>
+    <footer class="bottom-bar"><span id="map-stats"></span><span>路径按源码与配置整理；运行时判断保留为分支。</span></footer>
+  </main>
+  <aside id="source-panel" hidden aria-label="源码查看器"><header><div><span class="eyebrow">SOURCE / 源码快照</span><h2 id="source-title"></h2></div><button id="source-close" aria-label="关闭源码">×</button></header><div id="source-meta"></div><div id="source-code"></div></aside>
+  <dialog id="help"><button id="help-close" class="dialog-close" aria-label="关闭说明">×</button><span class="eyebrow">阅读方式</span><h2>知道从哪里来，也知道回哪里去。</h2><p>每列是一层函数流程，从上向下阅读。调用节点上的「展开子流程」连接到右侧下一列；顶部路径和「返回调用点」会带你回到原位置。</p><ol><li><b>蓝色调用节点</b>同时给出调用文件、行号和目标定义。子流程结束后，回到父节点继续下一步。</li><li><b>条件框</b>保留成立与不成立两条路径。当前配置确定不会走的路径默认折叠；运行时才能判断的路径均保留。</li><li><b>循环框</b>只展示一轮结构。预热、设备、模型层和执行图的实际重复次数没有被改成一次。</li><li>「读到这里」保存当前调用路径；「已读」按调用位置和进入路径独立记录。可导出进度备份。</li><li>源码为生成时的快照。项目更新后，在此目录运行 <code>python3 build_flow.py --check</code> 检查是否过期。</li></ol><p>本图读取项目自有 C++ 源码，省略简单取值、断言和标准库内部实现；Ramulator 停在项目适配层边界。多态与函数表的多个实现是可选子流程，不表示它们全部依次执行。未进行实际运行跟踪。</p><p>同一表达式中的嵌套调用先于外层调用显示；多个参数之间若 C++ 未规定先后，图中排布仅用于阅读。异常分支和 return / break / continue 均保留退出语义。</p><p id="storage-note">本页面不发送源码或阅读进度。若浏览器禁止本地文件存储，请使用导出进度，或通过本地 HTTP 服务打开。</p></dialog>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <noscript>此流程图需要启用 JavaScript。全部数据已保存在本地，无需联网。</noscript>
+</body>
+</html>

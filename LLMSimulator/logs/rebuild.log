@@ -1,0 +1,24 @@
+Configuring llm_system ...
+-- Build type: Release
+Configuring yaml-cpp...
+CMake Deprecation Warning at src/dram/ramulator2/ext/yaml-cpp/CMakeLists.txt:2 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+Done configuring yaml-cpp.
+Configuring spdlog...
+-- Build spdlog: 1.11.0
+-- Build type: Release
+Done configuring spdlog.
+Configuring argparse...
+Done configuring argparse.
+-- Configuring done (0.1s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/xiangyur/projects/projects/DSE/LLM_Sim/LLMSimulator/build
+[0/2] Re-checking globbed directories...
+ninja: no work to do.

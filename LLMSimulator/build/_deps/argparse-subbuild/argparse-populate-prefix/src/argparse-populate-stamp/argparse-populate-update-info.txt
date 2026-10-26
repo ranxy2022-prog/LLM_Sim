@@ -1,0 +1,7 @@
+# This is a generated file and its contents are an internal implementation detail.
+# The patch step will be re-executed if anything in this file changes.
+# No other meaning or use of this file is supported.
+
+command (connected)=/home/xiangyur/projects/projects/DSE/LLM_Sim/.venv/lib/python3.14/site-packages/cmake/data/bin/cmake;-Dcan_fetch=YES;-DCMAKE_MESSAGE_LOG_LEVEL=VERBOSE;-P;/home/xiangyur/projects/projects/DSE/LLM_Sim/LLMSimulator/build/_deps/argparse-subbuild/argparse-populate-prefix/tmp/argparse-populate-gitupdate.cmake
+command (disconnected)=/home/xiangyur/projects/projects/DSE/LLM_Sim/.venv/lib/python3.14/site-packages/cmake/data/bin/cmake;-Dcan_fetch=NO;-DCMAKE_MESSAGE_LOG_LEVEL=VERBOSE;-P;/home/xiangyur/projects/projects/DSE/LLM_Sim/LLMSimulator/build/_deps/argparse-subbuild/argparse-populate-prefix/tmp/argparse-populate-gitupdate.cmake
+work_dir=/home/xiangyur/projects/projects/DSE/LLM_Sim/LLMSimulator/src/dram/ramulator2/ext/argparse

@@ -1,0 +1,225 @@
+# LLMSimulator 中文参数说明；依据本地提交 419252761fbdb95b789778a02256d458a5537ec7。
+# 整理日期：2026-10-16。下面的值与整理时 config.yaml 一致。
+# 这是根据源码整理的说明，不是上游官方参数规范，也不表示所有组合都已运行验证。
+# 从外层 LLM_Sim 目录运行：./run.sh LLMSimulator/config.annotated.yaml
+# 同一配置反复运行会覆盖同名 CSV；不同优化开关也可能得到相同输出文件名。
+# 布尔值使用 on/off 或 true/false；大部分字段由 eval/test.cpp 直接读取，勿随意删除。
+# 下文源码路径均相对于 LLMSimulator/。
+
+model:
+  # 可选字符串（区分大小写）：mixtral、openMoE、llama7bMoE、llama3_405B、
+  # grok1、deepseekV3、llama4_scout、llama4_maverick。
+  # 选择源码内置的模型结构，不下载权重，也不接受任意 Hugging Face 模型 ID。
+  # 参数表：src/model/model_config.h；实际可选项：eval/test.cpp:160。
+  # 虽然头文件还定义了 glam，但当前入口没有对应分支，不能在这里选它。
+  # MLA 由模型的 qk_rope_head_dim != 0 选择；当前这些预设中只有 deepseekV3 走 MLA。
+  # 改层数、hidden_dim、head 数、expert 数等，需要修改 ModelConfig 并重新编译。
+  model_name: deepseekV3
+
+system:
+  # 入口接受 A100、H100、B100、B200，选择算力、显存容量/带宽等硬件预设。
+  # 注意：src/hardware/device.cpp:33 只为 H100、B100/B200 选择了 DRAM YAML；
+  # A100 会留下空路径，即使 use_ramulator=off 也会加载该路径，因此当前不能直接用。
+  # 预设详情：src/hardware/hardware_config.h；实际验证过的是当前 B100 配置。
+  gpu_gen: B100
+
+  # 可选 4 或 5：设置节点内互连模型。
+  # 当前代码分别取 450e9、900e9 B/s，延迟均为 800 ns；这些是模拟器中的取值。
+  nvlink_gen: 5
+
+  # 可选 400、800、3600、7200，设置节点间互连模型。
+  # 400/800：50e9/100e9 B/s，延迟 130 ns。
+  # 3600/7200：450e9/900e9 B/s，延迟 800 ns，代码将它们作为 NVLink 类互连。
+  # 不是任意带宽数值，不能直接填入 200 等未实现枚举值。见 eval/test.cpp:58。
+  infiniband_gen: 800
+
+  # 正整数：节点数、每个节点的设备数；总设备数 N=num_node*num_device。
+  num_node: 1
+  num_device: 8
+
+  # 当前入口支持 GPU、LOGIC、GPU+LOGIC、GPU+PIM；不支持单独的 PIM 字符串。
+  # GPU：GPU 算子模型；LOGIC：内存侧逻辑计算单元模型；PIM：存内计算模型。
+  # 混合模式下 high=GPU，low=LOGIC 或 PIM，算子的分配受下面的优化开关影响。
+  # LOGIC/PIM 的具体带宽倍数等仍来自 hardware_config.h，并非此处自由配置。
+  processor_type: GPU
+
+  distribution:
+    # 正整数：每个 routed expert 内部的张量并行度 T_e。
+    # 专家分组数由 N/T_e 推导，没有独立的 expert_parallel_degree 配置项。
+    # N 必须能被 T_e 整除；MoE 代码还要求 expert 数能被 T_e 整除，N/T_e <= expert 数。
+    # 为避免整数截断，expert 数也应能被专家分组数 N/T_e 整除。
+    # shared expert 使用下面的非专家 TP。见 src/module/expert.cpp:17。
+    expert_tensor_degree: 1
+
+    # 正整数：attention、普通 FFN 等非专家模块的张量并行度 T_ne。
+    # DP=N/T_ne；每个 DP 副本的 batch=max_batch_size/DP，均使用整数除法。
+    # N、batch 应能按上述关系整除；普通 attention 还要求 Q/KV head 数均可被 TP 整除。
+    # MoE 模型还检查 expert 数能被 T_ne 整除。不能只根据设备数选任意 TP。
+    # 当前 N=8、T_ne=1、batch=32，即 DP=8，每个副本 batch=4。
+    none_expert_tensor_degree: 1
+
+  optimization:
+    # on/off：异构 MoE expert 并行分配策略，不是主机 CPU 多线程开关。
+    # Route 按 expert 的 token 数估计 high/low 耗时，将不同 expert/组分配到两类单元。
+    # 实现：src/module/route.cpp:getIdxHigh、Route::forward。
+    # 与 use_low_unit_moe_only 不能同时 on；纯 GPU 模式下 high/low 都是 GPU。
+    parallel_execution: off
+
+    # on/off：当前实现把 routed expert 输出标记为 low；普通 Linear/Activation
+    # 对未预先标记的输入优先用 high。不要仅凭名称理解成任意比例的 batch 切分。
+    # Route 中该分支优先于 parallel_execution 和 use_low_unit_moe_only。
+    # 实现：src/module/route.cpp:235、src/module/linear.cpp:59、activation.cpp:66。
+    hetero_subbatch: off
+
+    # on/off：切换 prefill/decode 分离的调度与计时路径。
+    # on 调用 Cluster::runIterationSumGenSplit，分别维护 sum_machine_time 和 decode 时间。
+    # 没有分别配置两个资源池的节点数/GPU 类型，不能等同于完整的 PD 分离集群模型。
+    # off 调用 runIterationMixed；其调度器在有 prefill 时会优先处理 prefill。
+    # 见 src/hardware/cluster.cpp:446、527 和 src/scheduler/scheduler.cpp:260。
+    disagg_system: off
+
+    # on/off：把 routed MoE expert 标记为 low 单元执行；其他算子仍按自身策略选择。
+    # 与 parallel_execution 互斥，主要用于 GPU+LOGIC / GPU+PIM。
+    use_low_unit_moe_only: off
+
+    # on/off：算子的访存部分是否发送请求到修改过的 Ramulator 做详细模拟。
+    # off 使用算力/带宽等解析公式估计；on 通常更慢，不代表计算部分也变成真实 GPU 执行。
+    # DRAM 对象和 YAML 在 off 时仍会初始化。
+    # H100 使用 dram_config_HBM3_80GB.yaml；B100/B200 使用 dram_config_HBM3E_192GB.yaml。
+    use_ramulator: off
+
+    # on/off：MLA 的 KV 缓存表示；不指定 KV 量化位宽或通用缓存淘汰策略。
+    # use_absorb=off 时：
+    #   off：保存展开的各 head 的 K/V；后续 decode 复用展开结果。
+    #   on ：保存低维 latent KV 与 RoPE key；decode 时恢复历史 latent，重新做 KV up-proj。
+    #        因此缓存更小，但可能增加重建计算和临时激活，不能推断一定更快。
+    # DeepSeek 预设 kv_lora_rank=512、qk_rope_head_dim=64：
+    #   每 token、每层 latent 缓存为 512+64=576 个元素，再乘 precision_byte。
+    # 实现：src/module/compressed_kv_restore.cpp:23、49；attention.cpp:325。
+    # 重要：use_absorb=on 的 AbsorbMLAGen 始终创建 latent KV/PE cache，
+    #       即使这里设 off 也不会切换成展开 K/V，不能用此组合做“关闭压缩”的对照。
+    #       mem_cap_limit 的容量估算仍会读取此开关；因此 absorbed 路径保持 on 更一致。
+    # 普通 MHA/GQA 路径没有通过此开关实现 MLA 压缩；切换非 MLA 模型时建议设 off。
+    compressed_kv: on
+
+    # on/off：MLA 的矩阵吸收/重排计算路径。
+    # off：latent KV -> KV up-proj -> 展开的 K/V attention。
+    # on ：先把 query 变换到 KV latent 空间，在 latent cache 上做 attention，
+    #      再对聚合后的 context 做 V up-proj，避免对每个历史 token 展开 K/V。
+    # 代码仍显式建模 tr_k_up_proj 和 v_up_proj；不是把所有投影开销设为零。
+    # 实现：src/module/layer.cpp:95、199；src/module/attention.cpp:441。
+    # 主要适用于 MLA；普通 MHA/GQA 不会因设 on 而变成 MLA。
+    use_absorb: on
+
+    # on/off：MLA decode 的 Flash 风格融合访存/计算估算。
+    # on 按融合 attention 的 Q/cache/output 流量建模，减少中间 attention score 访存；
+    # off 走分阶段的 score、softmax、context 等估算路径。
+    # 同时用于普通 MLA decode 和 absorbed MLA decode，不是安装或调用 FlashMLA CUDA 库。
+    # 实现：src/hardware/attention_gen_impl.cpp:489、1470。
+    use_flash_mla: on
+
+    # on/off：当前显式接线到 use_absorb=off 的 MLA prefill 路径。
+    # on 使用分块 FlashAttention 风格估算，off 使用分阶段访存/计算估算。
+    # 不是所有模型所有阶段的全局 FlashAttention 开关：普通 SelfAttention 和
+    # absorbed MLA prefill 没有从这个 YAML 字段接收开关；decode 使用上面的 use_flash_mla。
+    # 实现：src/module/layer.cpp:169、src/hardware/attention_sum_impl.cpp:657。
+    use_flash_attention: on
+
+    # on/off：合成请求初始化时，假设有一段 prompt 已经具备 KV，跳过相应 prefill。
+    # 没有真实的跨请求前缀匹配、缓存命中查找或淘汰策略模拟。
+    # current_len = int(input_len * kv_cache_reuse_rate)。见 scheduler.cpp:76。
+    # decode_mode=on 随后会覆盖 current_len=input_len，所以当前 decode-only 配置下
+    # 调整 reuse_kv_cache / kv_cache_reuse_rate 不会改变这个初始化结果。
+    reuse_kv_cache: on
+
+    # 浮点数：已缓存的 prompt 比例，语义上使用 [0,1]；0 表示没有可复用前缀。
+    # 当前代码直接用固定比例，没有按随机分布采样，且没有显式范围校验。
+    # hardware_config.h 中“最大 0.5、随机到 2 倍”的旧注释不符合当前 scheduler 实现。
+    kv_cache_reuse_rate: 0.0
+
+    # on/off：合成请求只测 prefill；内部令请求 total_len=input_len，完成 prompt 即结束。
+    # 和 decode_mode 互斥；两个都 off 才是包含 prefill 和 decode 的请求流程。
+    # 参数用于 pushDummySeq；自带 trace 路径不能直接假设具有相同处理。
+    prefill_mode: off
+
+    # on/off：合成请求从 current_len=input_len 开始，跳过 prefill，只测 decode。
+    # 要求 output_len > 1。一次仿真迭代不等于完成一个请求。
+    # Sequence 的 total_len=input_len+output_len-1，首个输出 token 计入 prefill。
+    decode_mode: on
+
+serving:
+  # 正整数：所有非专家 DP 副本合计的最大并发序列数，不是每卡 batch。
+  # 应 >= DP 并能被 DP 整除，否则整数除法会造成截断甚至得到 0。
+  # 见 src/scheduler/scheduler.cpp:4。
+  max_batch_size: 32
+
+  # 非负整数：每个 DP 副本每轮 prefill 的 token 预算，会分给该副本的 prefill 请求。
+  # 0 在入口被替换成 65536*8=524288；不是没有上限，也不是不处理 token。
+  # decode 请求在当前调度逻辑中每轮处理 1 个 token，不由此字段直接控制。
+  # eval/test.cpp:224、src/scheduler/scheduler.cpp:298。
+  max_process_token: 0
+
+simulation:
+  # synthesis：合成固定长度请求；其他字符串按数据集名构造 trace 路径：
+  # ../expert_data/experts_<model_name>_<data>.csv（相对于 build/）。
+  # 仓库未附这些 trace；不能把任意字符串当成内置数据集。
+  # trace 不存在时有 fallback，但非 synthesis 分支未正确保证合成长度初始化，勿依赖它。
+  # 见 eval/test.cpp:211、src/scheduler/scheduler.cpp:511。
+  data: synthesis
+
+  # 正整数，单位 token：合成请求的 prompt 长度。
+  # 需要 < 模型预设 max_seq_len；input_len+output_len 超过上限时代码会截短 output_len。
+  input_len: 1024
+
+  # 正整数，单位 token：合成请求的目标输出长度；decode_mode 下必须 >1。
+  # 不是实际生成文本，模拟器只推进长度及算子执行。
+  output_len: 10
+
+  # 整数，单位 byte/元素：统一影响权重、激活、KV 等张量的存储/访存量。
+  # 常用 1（FP8/INT8 大小假设）或 2（FP16/BF16 大小假设）。
+  # 入口在值为 1 时将 GPU 峰值算力翻倍；不模拟数值精度或量化误差。
+  # 解析器没有完整枚举限制，但其他整数不意味着存在正确的对应 dtype 吞吐模型。
+  precision_byte: 1
+
+  # 浮点数：合成 MoE expert 路由的偏斜程度 s。
+  # s<=0 走均匀随机；s>0 按权重 1/(expert_index+1)^s 采样，越大越集中于少数 expert。
+  # 这是路由负载不均衡，不是请求长度分布或 KV 复用率。
+  # 见 src/scheduler/sequence.cpp:168。
+  skewness: 0.0
+
+  # 正整数：仿真调度循环次数，不是请求数、epoch 或重复实验次数。
+  # 已知上游导出问题：普通路径在下轮开始时写上轮统计，结束后未写末轮，
+  # 当前 iter=5 示例只写 4 条迭代数据；disagg 路径每 25 轮才触发一次导出，也未补写尾部。
+  # 见 src/hardware/cluster.cpp:459、527。
+  iter: 5
+
+  # 当前无效：eval/test.cpp 没有读取这个 YAML 字段，修改不会设置请求注入速率。
+  # 内部还有 use_inject_rate / request_per_second，但入口没有把这里的值传给它们。
+  injection_rate: 0
+
+  # on/off：启动时检查模拟显存容量，超过容量则提前退出。
+  # 当前提前退出返回码仍为 0，所以仅凭退出码不能证明实验产生了有效结果。
+  # 优先于 mem_cap_limit。见 eval/test.cpp 末尾和 src/hardware/cluster.cpp:242。
+  exit_out_of_memory: off
+
+  # on/off：超过模拟显存容量时，根据剩余空间与每条序列 KV 大小自动下调 batch。
+  # 只有 exit_out_of_memory=off 时才会进入这条分支；权重/激活本身放不下仍会报错。
+  # 两个开关都 off 时，超容量配置也可能继续计算；评估可部署性时应检查内存报告。
+  # 见 src/hardware/cluster.cpp:245。
+  mem_cap_limit: off
+
+log:
+  # on/off：结束时打印设备 0 的算子时间表；off 不会关闭所有启动/统计输出或 CSV。
+  print_log: on
+
+  # on/off：导出各设备的文本时间表到 gantt_directory/device_<id>。
+  # 不是直接生成图片或交互式甘特图。见 src/module/timeboard.cpp:107。
+  export_gantt: off
+
+  # 字符串目录：统计 CSV 的保存目录，需要存在。
+  # 外层 run.sh 将工作目录设为 build/，因此 ../data/ 指向 LLMSimulator/data/。
+  output_directory: ../data/
+
+  # 字符串目录：上述文本时间表的保存目录；同样相对 build/ 解释。
+  # 外层 run.sh 会创建默认 ./gantt；自定义目录请自行创建。
+  gantt_directory: ./gantt

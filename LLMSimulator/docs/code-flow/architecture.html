@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>LLMSimulator · 对象架构图</title>
+  <link rel="stylesheet" href="architecture.css">
+  <script defer src="architecture-data.js"></script><script defer src="architecture.js"></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="architecture.html"><span class="brand-icon">◇</span><span>LLMSimulator<small>对象架构图</small></span></a>
+    <p class="side-label">理解对象如何组成系统</p>
+    <nav id="views" aria-label="架构视图"></nav>
+    <div class="reading"><span class="side-label">阅读位置</span><button id="resume" disabled>尚未标记</button><p id="read-count"></p><div class="progress-tools"><button id="export-progress">导出</button><button id="import-progress">导入</button><input id="progress-file" type="file" accept="application/json" hidden></div></div>
+    <div class="config"><span class="side-label">本图配置快照</span><p>DeepSeek V3 · B100<br>1 节点 × 8 设备<br>GPU · decode · absorb MLA</p></div>
+    <a class="flow-link" href="index.html">↳ 打开原来的调用流程图</a>
+    <p class="offline">● 本地离线 · 源码未改动</p>
+  </aside>
+  <main>
+    <header class="page-header"><div><span class="eyebrow">OBJECT ARCHITECTURE / 从对象理解项目</span><h1 id="title"></h1><p id="subtitle"></p></div><button id="help-open" class="round" aria-label="阅读说明">?</button></header>
+    <div class="toolbar"><div class="legend"><span><i class="line child"></i>持有子对象</span><span><i class="line value"></i>内嵌 / 按值保存</span><span><i class="line ref"></i>引用已有对象</span><span><i class="line create"></i>创建 / 临时产物</span></div><div class="tools"><button id="zoom-out" aria-label="缩小">−</button><button id="fit">适应</button><button id="zoom-in" aria-label="放大">＋</button><button id="export-svg">导出 SVG</button></div></div>
+    <div id="view-note" class="view-note"></div>
+    <section id="workspace" tabindex="0" aria-label="对象关系图"><div id="diagram"></div></section>
+    <section id="model-tree" hidden aria-label="可展开模型对象树"></section>
+    <section id="catalog" hidden><div class="catalog-search"><label for="search">查找类 / struct / 成员 / 用途</label><input id="search" placeholder="例如 TopModuleGraph、tensor_list、请求…" autocomplete="off"><p id="catalog-count"></p></div><div id="catalog-list"></div></section>
+    <footer><span id="scope"></span><span>点对象查看成员、用途和源码 · 图内重复实例按类型归纳</span></footer>
+  </main>
+  <aside id="inspector" hidden aria-label="对象详情"><header><button id="inspect-back" disabled>← 上一个对象</button><button id="inspect-close" class="round" aria-label="关闭对象详情">×</button></header><div id="inspect-body"></div></aside>
+  <dialog id="source"><header><strong id="source-title"></strong><button id="source-close" class="round" aria-label="关闭源码">×</button></header><div id="source-links"></div><pre id="source-code"></pre></dialog>
+  <dialog id="help"><button id="help-close" class="round close" aria-label="关闭说明">×</button><span class="eyebrow">阅读说明</span><h2>先看包含，再看共享。</h2><p>总览展示入口创建的三大对象；设备执行视图重点解释 TopModuleGraph；模型组合树可逐层展开到算子与张量。对象详情会列出成员类型、子对象用途、继承的公共组成和源码位置。</p><p>实线表示包含关系，绿色是持有子对象，金色是值成员；虚线表示引用同一个已有对象。shared_ptr 可以被多处持有，所以“子对象”不意味着独占所有权。紫色点线表示创建或临时结果，不是永久成员。</p><p>图是源码结构整理，不是实际堆快照。循环创建的层/专家合并展示。模型树保留所有构造分支，当前配置可判断不成立的分支默认折叠；参数相关条件保留文字。</p><p>类型索引覆盖自有 src 中完整定义的 class / struct，包括历史遗留对象。标准库、枚举、指针别名不当成新对象；嵌入的 Ramulator 在外部接口处截止。</p><p>阅读标记只保存在当前浏览器，可导出备份。源码是生成时快照；更新代码后运行 <code>python3 build_architecture.py --check</code> 可检查是否过期。图中配置数量需随配置手动复核。</p></dialog>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <noscript>请启用 JavaScript；页面及源码数据全部在本地，无需联网。</noscript>
+</body>
+</html>
